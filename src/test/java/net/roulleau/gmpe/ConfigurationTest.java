@@ -76,7 +76,7 @@ public class ConfigurationTest {
     	
         try {
     		Gmpe.fill(this).with(new ParametersSourceCommandLine(args));
-    		fail("Should have failed because of a mandatory parameter missing");
+    		fail("Should have failed because of a mandatory parameter is missing");
     	} catch (ConfigurationException conf) {
     	}
     }
