@@ -11,7 +11,7 @@ import org.junit.Test;
 import net.roulleau.gmpe.sources.ParameterSourceClassPath;
 import net.roulleau.gmpe.sources.ParameterSourceFile;
 import net.roulleau.gmpe.sources.ParameterSourceSystemProperties;
-import net.roulleau.gmpe.sources.ParametersSourceCommandLine;
+import net.roulleau.gmpe.sources.ParameterSourceCommandLine;
 
 public class ConfigurationTest {
 
@@ -30,21 +30,21 @@ public class ConfigurationTest {
     @Test
     public void testCommandLineList() {
         String[] args = new String[] {"--params.list" , "013245678,087654321", "--param1", "12"};
-    	Gmpe.fill(this).with(new ParametersSourceCommandLine(args));
+    	Gmpe.fill(this).with(new ParameterSourceCommandLine(args));
         assertThat(paramsList).containsOnly("013245678","087654321");
     }
 	
     @Test
     public void testExternalFile() {
-    	String[] args = new String[] {"--" + ParametersSourceCommandLine.CONFIGURATION_FILE_PARAMETER_NAME, "target/test-classes/testconfigurationfile.conf"};
-    	Gmpe.fill(this).with(new ParametersSourceCommandLine(args), new ParameterSourceFile());
+    	String[] args = new String[] {"--" + ParameterSourceCommandLine.CONFIGURATION_FILE_PARAMETER_NAME, "target/test-classes/testconfigurationfile.conf"};
+    	Gmpe.fill(this).with(new ParameterSourceCommandLine(args), new ParameterSourceFile());
         assertThat(param1).isEqualTo(8282);
     }
     
     @Test
     public void testExternalFileListParameter()  {
-        String[] args = new String[] {"--" + ParametersSourceCommandLine.CONFIGURATION_FILE_PARAMETER_NAME, "target/test-classes/testconfigurationfile.conf"};
-    	Gmpe.fill(this).with(new ParametersSourceCommandLine(args), new ParameterSourceFile());
+        String[] args = new String[] {"--" + ParameterSourceCommandLine.CONFIGURATION_FILE_PARAMETER_NAME, "target/test-classes/testconfigurationfile.conf"};
+    	Gmpe.fill(this).with(new ParameterSourceCommandLine(args), new ParameterSourceFile());
         assertThat(paramsList).containsOnly("012345678","087654321");
     }
 
@@ -75,10 +75,17 @@ public class ConfigurationTest {
         String[] args = new String[] {"--params.list" , "013245678,087654321" };
     	
         try {
-    		Gmpe.fill(this).with(new ParametersSourceCommandLine(args));
+    		Gmpe.fill(this).with(new ParameterSourceCommandLine(args));
     		fail("Should have failed because of a mandatory parameter is missing");
     	} catch (ConfigurationException conf) {
     	}
+    }
+    
+    @Test
+    public void testInOtherPojoWithPrivateMember() {
+    	String[] args = new String[] {"--param1" , "my string" };
+		OtherPojo pojoFilled = Gmpe.fill(OtherPojo.class).with(new ParameterSourceCommandLine(args));
+		assertThat(pojoFilled.getMyPrivateParam()).isEqualTo("my string");
     }
     
 }

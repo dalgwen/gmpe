@@ -13,8 +13,8 @@ import net.roulleau.gmpe.sources.ParameterFiller;
  * 
  * Get My Parameters Everywhere Simple tool to get parameters from several
  * sources (command line, property file on file system, property file on
- * classpath, system properties) It is for simple needs, and it is simple to use
- * !
+ * classpath, system properties) It is for simple needs, and it
+ * is simple to use !
  * 
  * @see ConfigurationTest for samples.
  * 
@@ -24,6 +24,10 @@ import net.roulleau.gmpe.sources.ParameterFiller;
 public class Gmpe {
 
 	public static <T> GmpeBuilder<T> fill(T pojo) {
+		return new GmpeBuilder<T>(pojo);
+	}
+	
+	public static <T> GmpeBuilder<T> fill(Class<T> pojo) {
 		return new GmpeBuilder<T>(pojo);
 	}
 
@@ -64,10 +68,12 @@ public class Gmpe {
 
 			for (Field field : pojoToFill.getClass().getDeclaredFields()) {
 				Parameter annotation = field.getAnnotation(Parameter.class);
-				boolean isMandatory = annotation.mandatory();
-				String parameterName = annotation.value();
 
 				if (annotation != null) {
+
+					boolean isMandatory = annotation.mandatory();
+					String parameterName = annotation.value();
+
 					Object value;
 					try {
 						value = field.get(pojoToFill);
@@ -92,6 +98,7 @@ public class Gmpe {
 	                if (parameterValue.isPresent()) {
 	                    Object paramaterValuedConverted = convertValue(parameterValue.get(), field.getType()); 
 	                    try {
+	                    	field.setAccessible(true);
 	                        field.set(pojoToFill, paramaterValuedConverted);
 	                    } catch (IllegalArgumentException | IllegalAccessException e) {
 	                        throw new ConfigurationException("Cannot access parameter " + parameterName, e);

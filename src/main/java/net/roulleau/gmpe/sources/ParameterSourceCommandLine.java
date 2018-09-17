@@ -9,7 +9,7 @@ import net.roulleau.gmpe.libs.joptsimple.OptionException;
 import net.roulleau.gmpe.libs.joptsimple.OptionParser;
 import net.roulleau.gmpe.libs.joptsimple.OptionSet;
 
-public class ParametersSourceCommandLine extends ParameterFiller {
+public class ParameterSourceCommandLine extends ParameterFiller {
 
     private static final Logger LOGGER = Logger.getLogger(ParameterSourceFile.class.getName());
     
@@ -23,7 +23,7 @@ public class ParametersSourceCommandLine extends ParameterFiller {
         return optionSet;
     }
     
-    public ParametersSourceCommandLine(String args[]) {
+    public ParameterSourceCommandLine(String args[]) {
     	this.args = args;
     }
 
