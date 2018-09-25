@@ -40,9 +40,9 @@ public class ParameterSourceCommandLine extends ParameterFiller {
         for (ParameterWithField parameterField : parametersAvailable) {
             String parameterName = parameterField.annotation.value();
             if (parameterField.field.getType() == Boolean.class) {
-                parser.accepts(parameterName).withOptionalArg();
+                parser.accepts(parameterName);
             }
-            if (parameterField.field.getType() == List.class) {
+            else if (parameterField.field.getType() == List.class) {
                 parser.accepts(parameterName).withRequiredArg().withValuesSeparatedBy(",");
             }
             else {
